@@ -248,7 +248,7 @@ echo   "    systemctl --user disable ctf_server_$instance_name" >> $path/service
 echo "Do you want this server to start when the host machine does? (e.g, after a VPS restart)"
 select yn in "Yes" "No"; do
 	case $yn in
-		Yes ) systemctl --user enable ctf_server_$instance_name; break;;
+		Yes ) sudo systemctl --user enable ctf_server_$instance_name; break;;
 		No ) break;;
 	esac
 done
@@ -278,7 +278,7 @@ select yn in "Yes" "No"; do
 			echo "DISCORD_ID="         | tee -a $path/update_server.sh >> $path/start_server.sh
 			echo "DISCORD_TOKEN="      | tee -a $path/update_server.sh >> $path/start_server.sh
 
-			if ! [[ "$(dpkg-query -l python3)" ]]; then
+			if ! [[ "$(sudo dpkg-query -l python3)" ]]; then
 				read -p "python3 doesn't seem to be installed. Press any key to attempt installing it with apt"
 
 				sudo apt update

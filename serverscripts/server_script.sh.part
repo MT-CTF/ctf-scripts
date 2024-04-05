@@ -19,11 +19,11 @@ if [ -f "$LOG_PATH/debug.txt" ]; then
 		ERROR=$(tail -n100 $LOG_PATH/debug.txt | fgrep --before-context=10 ERROR | tail -c 1994)
 
 		if [ ${#ERROR} -le 0 ]; then
-			ERROR="\`Server Restarting...\`"
-			# message_chat "Server Restarting..."
+			ERROR="\`Server $SERVER_NAME Restarting...\`"
+			# message_chat "Server $SERVER_NAME Restarting..."
 		else
 			ERROR="\`\`\`$ERROR\`\`\`"
-			# message_chat "Server Restarting (Errors Reported)"
+			# message_chat "Server $SERVER_NAME Restarting (Errors Reported)"
 		fi
 
 		ERROR=$(echo "$ERROR" | json_escape)

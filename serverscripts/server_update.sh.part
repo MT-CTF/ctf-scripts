@@ -9,9 +9,9 @@ message() {
 }
 
 (
-	git -C ~/minetest/games/capturetheflag/ pull -r --recurse-submodules || message "Updated CTF"
-	git -C ~/minetest/games/capturetheflag/ submodule sync --recursive || message "Failed to sync CTF submodules"
-	git -C ~/minetest/games/capturetheflag/ submodule update --recursive || message "Failed to update CTF submodules"
+	git -C ~/minetest/games/capturetheflag/ pull -r --recurse-submodules || message "Updated CTF for server $SERVER_NAME"
+	git -C ~/minetest/games/capturetheflag/ submodule sync --recursive || message "Failed to sync CTF submodules for server $SERVER_NAME"
+	git -C ~/minetest/games/capturetheflag/ submodule update --recursive || message "Failed to update CTF submodules for server $SERVER_NAME"
 
 	cd ~/minetest/games/capturetheflag/ && ./scripts/setup_maps.sh
 ) &
