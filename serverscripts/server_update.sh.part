@@ -1,0 +1,36 @@
+
+message() {
+	if [[ $REPORT_DISCORD ]]; then
+		local MESSAGE="\"${1:empty}\""
+
+		WEBHOOK_URL="https://discord.com/api/webhooks/$DISCORD_ID/$DISCORD_TOKEN"
+		curl -X POST $WEBHOOK_URL -H "Content-Type: application/json" -d "{\"content\": $MESSAGE}" &
+	fi
+}
+
+(
+	git -C ~/minetest/games/capturetheflag/ pull -r --recurse-submodules || message "Updated CTF"
+	git -C ~/minetest/games/capturetheflag/ submodule sync --recursive || message "Failed to sync CTF submodules"
+	git -C ~/minetest/games/capturetheflag/ submodule update --recursive || message "Failed to update CTF submodules"
+
+	cd ~/minetest/games/capturetheflag/ && ./scripts/setup_maps.sh
+) &
+
+if [ -d "$HOME/minetest/worlds/$SERVER_NAME/worldmods/" ]; then
+	cd $HOME/minetest/worlds/$SERVER_NAME/worldmods/
+
+	for folder in */ ; do
+		if [ -d "./$folder.git" ]; then
+			(
+				git -C "./$folder" pull -r --recurse-submodules || message "Updated $SERVER_NAME mod: $folder"
+
+				if [ -f "./$folder.gitmodules" ]; then
+					git -C "./$folder" pull submodule sync --recursive || message "Failed to sync submodules of $SERVER_NAME mod: $folder"
+					git -C "./$folder" pull submodule update --recursive || message "Failed to update submodules of $SERVER_NAME mod: $folder"
+				fi
+			) &
+		fi
+	done
+fi
+
+wait
