@@ -9,6 +9,7 @@ cd $(dirname -- "${BASH_SOURCE[0]}") # Change to the directory this script is in
 
 # y/n code from https://stackoverflow.com/a/226724
 echo "Are you sure you want to set up a CTF server with the user '$USER'?"
+echo "Note: You will need to ssh into this user directly or the system service setup will fail"
 select yn in "Yes" "No"; do
 	case $yn in
 		Yes ) break;;
@@ -206,14 +207,11 @@ echo "[Unit]"                                                             >> $pa
 echo "Description=Service for the CaptureTheFlag server '$instance_name'" >> $path/ctf_server_$instance_name.service
 echo "StartLimitIntervalSec=120"                                          >> $path/ctf_server_$instance_name.service
 echo "StartLimitBurst=3"                                                  >> $path/ctf_server_$instance_name.service
-echo "DefaultDependencies=no"                                             >> $path/ctf_server_$instance_name.service
 echo "After=network.target"                                               >> $path/ctf_server_$instance_name.service
 echo ""                                                                   >> $path/ctf_server_$instance_name.service
 echo "[Service]"                                                          >> $path/ctf_server_$instance_name.service
 echo "Type=simple"                                                        >> $path/ctf_server_$instance_name.service
-echo "User=$USER"                                                         >> $path/ctf_server_$instance_name.service
-echo "Group=$USER"                                                        >> $path/ctf_server_$instance_name.service
-echo "ExecStart=$path/start_server.sh"                                    >> $path/ctf_server_$instance_name.service
+echo "ExecStart=/bin/bash $path/start_server.sh"                          >> $path/ctf_server_$instance_name.service
 echo "Restart=always"                                                     >> $path/ctf_server_$instance_name.service
 echo "LimitCORE=infinity"                                                 >> $path/ctf_server_$instance_name.service
 echo ""                                                                   >> $path/ctf_server_$instance_name.service
@@ -243,12 +241,14 @@ printf "Run the following command to make the ctf server start when the host mac
 echo   "    systemctl --user enable ctf_server_$instance_name" >> $path/service_startup.txt;
 printf "\nRun the following command to stop the ctf server from starting when the host machine does:\n" >> $path/service_startup.txt;
 echo   "    systemctl --user disable ctf_server_$instance_name" >> $path/service_startup.txt;
+printf "\n\nRun the following command to update the service file after editing it:\n" >> $path/service_startup.txt;
+echo   "    cp $path/ctf_server_$instance_name.service ~/.config/systemd/user/ && systemctl --user daemon-reload"
 
 # y/n code from https://stackoverflow.com/a/226724
 echo "Do you want this server to start when the host machine does? (e.g, after a VPS restart)"
 select yn in "Yes" "No"; do
 	case $yn in
-		Yes ) sudo systemctl --user enable ctf_server_$instance_name; break;;
+		Yes ) systemctl --user enable ctf_server_$instance_name; break;;
 		No ) break;;
 	esac
 done
@@ -305,6 +305,9 @@ cat ./serverscripts/server_update.sh.part >> $path/update_server.sh
 
 chmod +x $path/start_server.sh
 chmod +x $path/update_server.sh
+
+# pre-create the world folder
+mkdir $path/world/
 
 echo "Done. The Discord ID and webhook token still need to be put in the files $path/start_server.sh and $path/update_server.sh"
 
