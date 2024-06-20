@@ -1,2 +1,3 @@
 ## TODO:
 * Allow overwriting/deleting existing servers
+* systemctl file removal on delete
