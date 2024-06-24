@@ -62,9 +62,9 @@ select yn in "Yes" "No"; do
 	esac
 done
 
-if [[ setup_redis == true ]]; then
+if [[ $setup_redis == true ]]; then
 	sudo apt install luarocks redis
-	sudo luarocks install luaredis
+	sudo luarocks --lua-version 5.1 install luaredis
 
 	echo ""
 	echo "The ctf_rankings settings can be edited in $path/minetest.conf after you finish setting it up"
@@ -237,9 +237,9 @@ echo ""
 mkdir -p ~/.config/systemd/user/
 cp $path/ctf_server_$instance_name.service ~/.config/systemd/user/
 
-printf "Run the following command to make the ctf server start when the host machine does \(e.g, after a VPS restart\):\n" >> $path/service_startup.txt;
+printf "Run the following command to turn on the systemd service:\n" >> $path/service_startup.txt;
 echo   "    systemctl --user enable ctf_server_$instance_name" >> $path/service_startup.txt;
-printf "\nRun the following command to stop the ctf server from starting when the host machine does:\n" >> $path/service_startup.txt;
+printf "\nRun the following command to off the systemd service:\n" >> $path/service_startup.txt;
 echo   "    systemctl --user disable ctf_server_$instance_name" >> $path/service_startup.txt;
 printf "\n\nRun the following command to update the service file after editing it:\n" >> $path/service_startup.txt;
 echo   "    cp $path/ctf_server_$instance_name.service ~/.config/systemd/user/ && systemctl --user daemon-reload"
@@ -275,8 +275,8 @@ select yn in "Yes" "No"; do
 	case $yn in
 		Yes )
 			echo "REPORT_DISCORD=true" | tee -a $path/update_server.sh >> $path/start_server.sh
-			echo "DISCORD_ID="         | tee -a $path/update_server.sh >> $path/start_server.sh
-			echo "DISCORD_TOKEN="      | tee -a $path/update_server.sh >> $path/start_server.sh
+			echo "DISCORD_URL_FIRSTNUM="         | tee -a $path/update_server.sh >> $path/start_server.sh
+			echo "DISCORD_URL_LASTNUM="      | tee -a $path/update_server.sh >> $path/start_server.sh
 
 			if ! [[ "$(sudo dpkg-query -l python3)" ]]; then
 				read -p "python3 doesn't seem to be installed. Press any key to attempt installing it with apt"
@@ -309,7 +309,7 @@ chmod +x $path/update_server.sh
 # pre-create the world folder
 mkdir $path/world/
 
-echo "Done. The Discord ID and webhook token still need to be put in the files $path/start_server.sh and $path/update_server.sh"
+echo "Done. The Discord webhook's URL numbers still need to be put in the files $path/start_server.sh and $path/update_server.sh"
 
 # y/n code from https://stackoverflow.com/a/226724
 echo "Do you want to edit them both now?"

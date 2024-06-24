@@ -3,7 +3,7 @@ message() {
 	if [[ $REPORT_DISCORD ]]; then
 		local MESSAGE="\"${1:empty}\""
 
-		WEBHOOK_URL="https://discord.com/api/webhooks/$DISCORD_ID/$DISCORD_TOKEN"
+		WEBHOOK_URL="https://discord.com/api/webhooks/$DISCORD_URL_FIRSTNUM/$DISCORD_URL_LASTNUM"
 		curl -X POST $WEBHOOK_URL -H "Content-Type: application/json" -d "{\"content\": $MESSAGE}" &
 	fi
 }
