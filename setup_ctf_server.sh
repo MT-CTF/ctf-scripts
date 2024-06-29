@@ -22,7 +22,7 @@ if ! [[ -d ~/capture_the_flag/ ]]; then
 fi
 
 echo ""
-echo "Please enter a technical name for this new ctf server (e.g main_ctf)."
+echo "Please enter a technical name for this new ctf server (e.g main)."
 echo "It will only be used by the management scripts"
 
 read -p "> " instance_name

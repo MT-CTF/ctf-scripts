@@ -16,8 +16,8 @@ message() {
 	cd ~/minetest/games/capturetheflag/ && ./scripts/setup_maps.sh
 ) &
 
-if [ -d "$HOME/minetest/worlds/$SERVER_NAME/worldmods/" ]; then
-	cd $HOME/minetest/worlds/$SERVER_NAME/worldmods/
+if [ -d "$SERVER_PATH/world/worldmods/" ]; then
+	cd $SERVER_PATH/world/worldmods/
 
 	for folder in */ ; do
 		if [ -d "./$folder.git" ]; then
