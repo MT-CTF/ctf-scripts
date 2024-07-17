@@ -25,8 +25,25 @@ if [ -d "$SERVER_PATH/world/worldmods/" ]; then
 				git -C "./$folder" pull -r --recurse-submodules || message "Updated $SERVER_NAME mod: $folder"
 
 				if [ -f "./$folder.gitmodules" ]; then
-					git -C "./$folder" pull submodule sync --recursive || message "Failed to sync submodules of $SERVER_NAME mod: $folder"
-					git -C "./$folder" pull submodule update --recursive || message "Failed to update submodules of $SERVER_NAME mod: $folder"
+					git -C "./$folder" submodule sync --recursive || message "Failed to sync submodules of $SERVER_NAME mod: $folder"
+					git -C "./$folder" submodule update --recursive || message "Failed to update submodules of $SERVER_NAME mod: $folder"
+				fi
+			) &
+		fi
+	done
+fi
+
+if [ -d "$HOME/minetest/mods/" ]; then
+	cd $HOME/minetest/mods/
+
+	for folder in */ ; do
+		if [ -d "./$folder.git" ]; then
+			(
+				git -C "./$folder" pull -r --recurse-submodules || message "Updated mod: $folder"
+
+				if [ -f "./$folder.gitmodules" ]; then
+					git -C "./$folder" submodule sync --recursive || message "Failed to sync submodules of mod: $folder"
+					git -C "./$folder" submodule update --recursive || message "Failed to update submodules of mod: $folder"
 				fi
 			) &
 		fi
