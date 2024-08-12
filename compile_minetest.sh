@@ -16,6 +16,6 @@ cmake . -DCMAKE_BUILD_TYPE=Release
 cmake . -DRUN_IN_PLACE=TRUE -DBUILD_SERVER=TRUE -DBUILD_CLIENT=FALSE -DENABLE_LUAJIT=TRUE -DREQUIRE_LUAJIT=TRUE
 
 echo
-read -p "Press any key to continue"
+read -p "Press enter to continue"
 
 make -j $(nproc)

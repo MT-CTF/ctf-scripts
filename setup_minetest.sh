@@ -24,7 +24,7 @@ else
 	git -C ~ clone --depth 1 https://github.com/minetest/minetest.git
 
 	echo
-	read -p "Press any key to continue"
+	read -p "Press enter to continue"
 
 	if [ -f "$HOME/minetest/misc/irrlichtmt_tag.txt" ]; then
 		git -C ~ clone --depth 1 --branch "$(cat ~/minetest/misc/irrlichtmt_tag.txt)" https://github.com/minetest/irrlicht.git ~/minetest/lib/irrlichtmt
