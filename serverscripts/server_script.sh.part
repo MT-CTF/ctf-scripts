@@ -32,11 +32,18 @@ if [ -f "$LOG_PATH/debug.txt" ]; then
 		curl -X POST $WEBHOOK_URL -H "Content-Type: application/json" -d "{\"content\": $ERROR}" &
 	fi
 
-	# This will backup logs until no space is left. Will need to look into the below link for doing auto-removal
-	# https://superuser.com/questions/273406/get-folder-with-largest-number-at-the-end-of-the-name-in-linux
-	mv --backup=numbered $LOG_PATH/debug.txt $LOG_PATH/old_debug.txt
+	touch $LOG_PATH/debug_$(date +"%d-%m-%Y").txt
+	cat $LOG_PATH/debug.txt >> $LOG_PATH/debug_$(date +"%d-%m-%Y").txt
+	printf "\n\n\n\n\n\n" >> $LOG_PATH/debug_$(date +"%d-%m-%Y").txt
+	echo "" > $LOG_PATH/debug.txt
+
+	find $LOG_PATH/* -mtime +365 -delete &
 fi
+
+$SERVER_PATH/server_update.sh
 
 $HOME/minetest/bin/minetestserver --gameid capturetheflag --world $SERVER_PATH/world/ --config $SERVER_PATH/minetest.conf --logfile $LOG_PATH/debug.txt
 # Comment out the line above and uncomment the one below if you want to get backtraces at $SERVER_PATH/gdb.txt
 #cd $SERVER_PATH && gdb -batch -ex "set logging on" -ex "run" -ex "bt" --args $HOME/minetest/bin/minetestserver --gameid capturetheflag --world $SERVER_PATH/world/ --config $SERVER_PATH/minetest.conf --logfile $LOG_PATH/debug.txt
+
+wait
