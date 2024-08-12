@@ -275,8 +275,9 @@ select yn in "Yes" "No"; do
 	case $yn in
 		Yes )
 			echo "REPORT_DISCORD=true" | tee -a $path/update_server.sh >> $path/start_server.sh
-			echo "DISCORD_URL_FIRSTNUM="         | tee -a $path/update_server.sh >> $path/start_server.sh
-			echo "DISCORD_URL_LASTNUM="      | tee -a $path/update_server.sh >> $path/start_server.sh
+
+			read -p "Please enter the webhook url: " url
+			echo "WEBHOOK_URL=\"$url\"" | tee -a $path/update_server.sh >> $path/start_server.sh
 
 			if ! [[ "$(sudo dpkg-query -l python3)" ]]; then
 				read -p "python3 doesn't seem to be installed. Press any key to attempt installing it with apt"
@@ -308,25 +309,6 @@ chmod +x $path/update_server.sh
 
 # pre-create the world folder
 mkdir $path/world/
-
-echo "Done. The Discord webhook's URL numbers still need to be put in the files $path/start_server.sh and $path/update_server.sh"
-
-# y/n code from https://stackoverflow.com/a/226724
-echo "Do you want to edit them both now?"
-select yn in "Yes" "No"; do
-	case $yn in
-		Yes )
-			clear -x
-			nano $path/start_server.sh
-			read -p "Press any key to continue"
-			clear -x
-			nano $path/update_server.sh
-			read -p "Done."
-			break;;
-		No )
-			break;;
-	esac
-done
 
 echo "The server files are at $path/"
 echo "Remember to set the map backend to dummy if this isn't a map making server"

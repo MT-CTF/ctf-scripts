@@ -28,7 +28,6 @@ if [ -f "$LOG_PATH/debug.txt" ]; then
 
 		ERROR=$(echo "$ERROR" | json_escape)
 
-		WEBHOOK_URL="https://discord.com/api/webhooks/$DISCORD_URL_FIRSTNUM/$DISCORD_URL_LASTNUM"
 		curl -X POST $WEBHOOK_URL -H "Content-Type: application/json" -d "{\"content\": $ERROR}" &
 	fi
 
