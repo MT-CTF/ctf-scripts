@@ -329,3 +329,4 @@ select yn in "Yes" "No"; do
 done
 
 echo "The server files are at $path/"
+echo "Remember to set the map backend to dummy if this isn't a map making server"
