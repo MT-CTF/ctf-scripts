@@ -242,7 +242,7 @@ echo   "    systemctl --user enable ctf_server_$instance_name" >> $path/service_
 printf "\nRun the following command to off the systemd service:\n" >> $path/service_startup.txt;
 echo   "    systemctl --user disable ctf_server_$instance_name" >> $path/service_startup.txt;
 printf "\n\nRun the following command to update the service file after editing it:\n" >> $path/service_startup.txt;
-echo   "    cp $path/ctf_server_$instance_name.service ~/.config/systemd/user/ && systemctl --user daemon-reload"
+echo   "    cp $path/ctf_server_$instance_name.service ~/.config/systemd/user/ && systemctl --user daemon-reload" >> $path/service_startup.txt;
 
 # y/n code from https://stackoverflow.com/a/226724
 echo "Do you want this server to start when the host machine does? (e.g, after a VPS restart)"
